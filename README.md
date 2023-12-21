@@ -21,4 +21,5 @@
     > !t getResult
 
     > !t gr
+    
     取得投票結果

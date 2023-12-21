@@ -3,10 +3,6 @@ from discord.ext import commands, tasks
 from datetime import datetime, timedelta
 import re
 
-
-Friday = ":grinning:"
-Saturday = ":wink:"
-busy = ":pleading_face:"
 emoji_num = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 def checkOpt(message):
     print("checking Opt")
