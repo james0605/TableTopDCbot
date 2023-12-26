@@ -4,9 +4,10 @@ import discord
 from discord.ext import commands
 
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix = "!t ", intents = intents)
-
-TOKEN = "your discord bot token"
+bot = commands.Bot(command_prefix = "!", intents = intents)
+with open("F:/Learning/TableTopDCbot_1/token.txt", mode='r') as f:
+    TOKEN = f.readline()
+    
 # 當機器人完成啟動時
 @bot.event
 async def on_ready():
@@ -35,6 +36,8 @@ async def load_extensions():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
+
+
 
 async def main():
     async with bot:

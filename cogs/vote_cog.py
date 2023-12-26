@@ -1,8 +1,12 @@
 import discord
 from discord.ext import commands, tasks
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
+import datetime
 import re
 
+
+tz =datetime.timezone(datetime.timedelta(hours=8))
+checkDateTime = datetime.time(hour=18, minute=00, tzinfo=tz)
 emoji_num = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
 def checkOpt(message):
     print("checking Opt")
@@ -17,19 +21,22 @@ def checkOpt(message):
     return res
     
 
-# 定義名為 Main 的 Cog
-class Main(commands.Cog):
+# 定義名為 vote_cog 的 Cog
+class vote_cog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.checkDateMessageID = None
         self.checkDate.start()
-        
-        
+
     # 前綴指令
     @commands.command(aliases=['gr'])
     async def getResult(self, ctx: commands.Context):
         print(f"check Result")
         message_id = self.checkDateMessageID
+        print(f"message id {message_id}")
+        if message_id == None:
+            await ctx.send(f"Message not found")
+            return
         try:
             # 透過 fetch_message 方法取得特定 ID 的訊息
             message = await ctx.channel.fetch_message(message_id)
@@ -55,6 +62,8 @@ class Main(commands.Cog):
         except discord.NotFound:
             await ctx.send("Message not found.")
     
+
+
     @commands.command(aliases=['v'])
     async def vote(self, ctx: commands.Context, *, choice):
         cho = re.compile(r'\S+').findall(choice)
@@ -75,22 +84,25 @@ class Main(commands.Cog):
             await msg.add_reaction("👍")
             await msg.add_reaction("👎")
 
-    @tasks.loop(hours=24)
+
+    
+    @tasks.loop(time=checkDateTime)
     async def checkDate(self):
         # check is Monday
-        currentTime = datetime.now()
-        if datetime.now().weekday() == 0:
+        print("checkDate")
+        currentTime = datetime.datetime.now()
+        print(currentTime.weekday())
+        if currentTime.weekday() == 0:
             print("check Date")
             days_until_friday = (4 - currentTime.weekday() + 7) % 7
-            nextFriday = currentTime + timedelta(days = days_until_friday)
-            nextSaturday = nextFriday + timedelta(days=1)
+            nextFriday = currentTime + datetime.timedelta(days = days_until_friday)
+            nextSaturday = nextFriday + datetime.timedelta(days=1)
             formattedFridayDate = nextFriday.strftime("%m/%d")
             formattedSaturdayDate = nextSaturday.strftime("%m/%d")
             
-            
-            channel_id = "your channel id"
+            channel_id = 'your channel id'
             channel = self.bot.get_channel(channel_id)
-            if channel:
+            if channel:            
                 await channel.send("@everyone")
                 embed = discord.Embed(title="桌遊夜", color = 0x0011ff)
                 embed.add_field(name = f"{emoji_num[0]}{formattedFridayDate}", value = "\u200b", inline=False)
@@ -114,4 +126,5 @@ class Main(commands.Cog):
 
 # Cog 載入 Bot 中
 async def setup(bot: commands.Bot):
-    await bot.add_cog(Main(bot))
+    print("setup vote_cog")
+    await bot.add_cog(vote_cog(bot))
