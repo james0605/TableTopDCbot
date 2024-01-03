@@ -29,7 +29,7 @@ class vote_cog(commands.Cog):
         self.checkDate.start()
 
     # 前綴指令
-    @commands.command(aliases=['gr'])
+    @commands.command(aliases=['gr'], help = "get the 桌遊夜 poll's result")
     async def getResult(self, ctx: commands.Context):
         print(f"check Result")
         message_id = self.checkDateMessageID
@@ -64,7 +64,7 @@ class vote_cog(commands.Cog):
     
 
 
-    @commands.command(aliases=['v'])
+    @commands.command(aliases=['v'], help="Create a poll")
     async def vote(self, ctx: commands.Context, *, choice):
         cho = re.compile(r'\S+').findall(choice)
         if len(cho) > 2:
@@ -99,6 +99,7 @@ class vote_cog(commands.Cog):
             nextSaturday = nextFriday + datetime.timedelta(days=1)
             formattedFridayDate = nextFriday.strftime("%m/%d")
             formattedSaturdayDate = nextSaturday.strftime("%m/%d")
+            
             
             channel_id = 'your channel id'
             channel = self.bot.get_channel(channel_id)

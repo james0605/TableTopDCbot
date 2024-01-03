@@ -81,7 +81,7 @@ class music_cog(commands.Cog):
         else:
             self.is_playing = False
 
-    @commands.command(aliases=['j'])
+    @commands.command(aliases=['j'], help = "Join the voice channel")
     async def join(self, ctx: commands.Context):
         #這裡的指令會讓機器人進入call他的人所在的語音頻道
         voiceChannel = ctx.author.voice.channel
@@ -103,7 +103,7 @@ class music_cog(commands.Cog):
         print(f"self.vc {self.vc}")
 
     # leave command
-    @commands.command(description="stops and disconnects the bot from voice", aliases=['l'])
+    @commands.command(help="Stops and Disconnects the bot from voice channel", aliases=['l'])
     async def leave(self, ctx: commands.Context):
         self.is_playing = False
         self.is_paused = False
