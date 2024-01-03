@@ -61,6 +61,20 @@ class ToDoList_cog(commands.Cog):
         newEmbed = discord.Embed(title=self.title, color = 0x0011ff, description=des)
         await self.todolistMsg.edit(embed=newEmbed)
         
+    @commands.command(aliases=['uch'], help='Uncheck the Checkbox')
+    async def uncheck(self, ctx:commands.Context, task):
+        # delete user's message
+        await ctx.message.delete()
+        # uncheck the todolist checkbox
+        print(f"uncheck {task}") # str
+        if task in self.todolist:
+            self.todolist[task] = False
+        else:
+            await ctx.send(f"{task} not in todolist")
+        # reprint the todolist message
+        des = createDesctiption(self.todolist)
+        newEmbed = discord.Embed(title=self.title, color = 0x0011ff, description=des)
+        await self.todolistMsg.edit(embed=newEmbed)
         
         
 # Cog 載入 Bot 中
